@@ -4,7 +4,6 @@ import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.services.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import java.util.*;
 
@@ -23,6 +22,7 @@ public class DeleteExpiredCouponsTimerTask extends TimerTask {
     private void initTimerTask() {
         Timer timer = new Timer();
         timer.schedule(this, getExecutionDate(), 86400000);
+//        timer.schedule(this, 0, 5000);
     }
 
     private static Date getExecutionDate() {
@@ -37,15 +37,10 @@ public class DeleteExpiredCouponsTimerTask extends TimerTask {
 
     @Override
     public void run() {
-        try {
-            List<Coupon> set = couponService.getAllCoupons();
-            for (Coupon coupon : set) {
-                if (coupon.getEndDate().before(currentDate)) {
-                    couponService.deleteCouponById(coupon.getId());
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        List<Coupon> set = couponService.getAllCoupons();
+        set
+                .stream()
+                .filter(coupon -> coupon.getEndDate().before(currentDate))
+                .forEach(coupon -> couponService.deleteCouponById(coupon.getId()));
     }
 }
