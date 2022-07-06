@@ -13,6 +13,7 @@ public class CouponDtoToCouponConverter implements Converter<CouponDto, Coupon> 
     public Coupon convert(@NotNull CouponDto source) {
         Coupon coupon = new Coupon();
         coupon.setId(source.getId());
+        coupon.setCompanyId(source.getCompanyId());
         coupon.setCategory(source.getCategory());
         coupon.setTitle(source.getTitle());
         coupon.setDescription(source.getDescription());

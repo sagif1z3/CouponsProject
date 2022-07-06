@@ -9,20 +9,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @NoArgsConstructor
 public class CouponServiceImpl implements CouponService {
 
-        private CouponRepository couponRepository;
-        private CouponToCouponDtoConverter couponToCouponDtoConverter;
-        private CouponDtoToCouponConverter couponDtoToCouponConverter;
+    private CouponRepository couponRepository;
+    private CouponToCouponDtoConverter couponToCouponDtoConverter;
+    private CouponDtoToCouponConverter couponDtoToCouponConverter;
 
-        @Autowired
+    @Autowired
     public CouponServiceImpl(CouponRepository couponRepository,
                              @Lazy CouponToCouponDtoConverter couponToCouponDtoConverter,
                              @Lazy CouponDtoToCouponConverter couponDtoToCouponConverter) {

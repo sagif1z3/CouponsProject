@@ -19,6 +19,9 @@ public class CouponDto {
     @Column(name = "id", updatable = false)
     private long id;
 
+    @Column(name = "company_id", nullable = false)
+    private long companyId;
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "category", nullable = false)
     private Category category;
