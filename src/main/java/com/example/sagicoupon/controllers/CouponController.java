@@ -2,22 +2,18 @@ package com.example.sagicoupon.controllers;
 
 import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.services.CouponService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/coupon")
 public class CouponController {
 
     private final CouponService couponService;
-
-    @Autowired
-    public CouponController(CouponService couponService) {
-        this.couponService = couponService;
-    }
 
     @PostMapping("/addnew")
     public Coupon addNewCoupon(@RequestBody Coupon coupon){

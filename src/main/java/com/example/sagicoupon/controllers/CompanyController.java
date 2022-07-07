@@ -2,22 +2,18 @@ package com.example.sagicoupon.controllers;
 
 import com.example.sagicoupon.services.CompanyService;
 import com.example.sagicoupon.model.Company;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/company")
 public class CompanyController {
 
     private final CompanyService companyService;
-
-    @Autowired
-    public CompanyController(CompanyService companyService) {
-        this.companyService = companyService;
-    }
 
     @PostMapping("/addnew")
     public Company addNewCompany(@RequestBody Company company) {
