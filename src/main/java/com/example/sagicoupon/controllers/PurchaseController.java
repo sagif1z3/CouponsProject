@@ -1,10 +1,9 @@
 package com.example.sagicoupon.controllers;
 
+import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.model.Purchase;
 import com.example.sagicoupon.services.PurchaseService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,7 +15,7 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
 
     @PostMapping("/addnew")
-    public Purchase addNewPurchase(@RequestBody Purchase purchase){
+    public Purchase addNewPurchase(@RequestBody Purchase purchase, Coupon coupon){
         return purchaseService.addPurchase(purchase);
     }
 

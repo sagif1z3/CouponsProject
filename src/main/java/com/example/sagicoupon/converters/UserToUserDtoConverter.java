@@ -12,7 +12,7 @@ public class UserToUserDtoConverter implements Converter<User, UserDto> {
     @Override
     public UserDto convert(@NotNull User source){
         return UserDto.builder()
-                .id(source.getId())
+//                .id(source.getId())
                 .firstName(source.getFirstName())
                 .lastName(source.getLastName())
                 .username(source.getUsername())

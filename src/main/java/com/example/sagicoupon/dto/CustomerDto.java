@@ -3,22 +3,20 @@ package com.example.sagicoupon.dto;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "customer")
-@Table(name = "customeres")
+@Table(name = "customers")
 public class CustomerDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
     private long id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private UserDto userDto;
 
     @Column(name = "address", nullable = false, columnDefinition = "TEXT")
     private String address;
@@ -27,6 +25,10 @@ public class CustomerDto {
     private int amountOfKids;
 
     @Column(name = "birth_date", nullable = false, columnDefinition = "DATE")
-    private Date birthDate;
+    private LocalDate birthDate;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    @MapsId
+    private UserDto userDto;
 }

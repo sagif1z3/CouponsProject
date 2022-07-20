@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,4 +39,5 @@ public class UserDto {
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userDto")
     private List<PurchaseDto> purchaseDto;
+
 }

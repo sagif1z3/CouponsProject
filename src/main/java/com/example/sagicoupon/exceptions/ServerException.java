@@ -2,7 +2,8 @@ package com.example.sagicoupon.exceptions;
 
 import com.example.sagicoupon.enums.ErrorType;
 
-public class ServerException extends Exception {
+public class ServerException extends RuntimeException {
+
     private ErrorType errorType;
 
     public ServerException(ErrorType errorType) {

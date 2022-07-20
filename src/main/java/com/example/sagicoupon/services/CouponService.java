@@ -1,5 +1,6 @@
 package com.example.sagicoupon.services;
 
+import com.example.sagicoupon.dto.CouponDto;
 import com.example.sagicoupon.model.Coupon;
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface CouponService {
     Coupon updateCoupon(Coupon coupon);
 
     void deleteCouponById(Long id);
+
+    List<CouponDto> getExpiredCoupons();
+
+    CouponDto getCouponDtoById (Long id);
 }

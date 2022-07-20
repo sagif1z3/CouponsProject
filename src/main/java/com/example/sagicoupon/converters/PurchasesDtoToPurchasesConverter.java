@@ -13,10 +13,8 @@ public class PurchasesDtoToPurchasesConverter implements Converter<PurchaseDto, 
     public Purchase convert(@NotNull PurchaseDto source) {
         Purchase purchaseDto = new Purchase();
         purchaseDto.setId(source.getId());
-        purchaseDto.setCouponTitle(source.getCouponTitle());
         purchaseDto.setDate(source.getDate());
         purchaseDto.setAmount(source.getAmount());
-        purchaseDto.setPrice(source.getPrice());
         purchaseDto.setTotalPrice(source.getTotalPrice());
         return purchaseDto;
     }

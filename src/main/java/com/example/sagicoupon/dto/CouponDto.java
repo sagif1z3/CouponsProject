@@ -3,10 +3,11 @@ package com.example.sagicoupon.dto;
 import com.example.sagicoupon.enums.Category;
 import lombok.*;
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,9 +20,6 @@ public class CouponDto {
     @Column(name = "id", updatable = false)
     private long id;
 
-    @Column(name = "company_id", nullable = false)
-    private long companyId;
-
     @Enumerated(value = EnumType.STRING)
     @Column(name = "category", nullable = false)
     private Category category;
@@ -33,16 +31,16 @@ public class CouponDto {
     private String description;
 
     @Column(name = "start_date", nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "amount", nullable = false)
     private int amount;
 
     @Column(name = "price", nullable = false)
-    private double price;
+    private float price;
 
     @Column(name = "image", nullable = false)
     private String image;

@@ -2,14 +2,12 @@ package com.example.sagicoupon.controllers;
 
 import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.services.CouponService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/coupon")
 public class CouponController {
 
@@ -35,7 +33,7 @@ public class CouponController {
         return couponService.updateCoupon(coupon);
     }
 
-    @GetMapping("/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public void deleteCouponById(@PathVariable Long id){
         couponService.deleteCouponById(id);
     }

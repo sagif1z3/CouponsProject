@@ -1,22 +1,19 @@
 package com.example.sagicoupon.tasks;
 
-import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.services.CouponService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Component
+@AllArgsConstructor
 public class DeleteExpiredCouponsTimerTask extends TimerTask {
-    private final CouponService couponService;
-    private final Date currentDate;
 
-    @Autowired
-    public DeleteExpiredCouponsTimerTask(CouponService couponService) {
-        this.couponService = couponService;
-        this.currentDate = new Date();
-    }
+    private final CouponService couponService;
 
     @PostConstruct
     private void initTimerTask() {
@@ -37,10 +34,7 @@ public class DeleteExpiredCouponsTimerTask extends TimerTask {
 
     @Override
     public void run() {
-        List<Coupon> set = couponService.getAllCoupons();
-        set
-                .stream()
-                .filter(coupon -> coupon.getEndDate().before(currentDate))
+        couponService.getExpiredCoupons()
                 .forEach(coupon -> couponService.deleteCouponById(coupon.getId()));
     }
 }

@@ -1,43 +1,37 @@
 package com.example.sagicoupon.services;
 
+import com.example.sagicoupon.dto.CouponDto;
 import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.converters.CouponToCouponDtoConverter;
 import com.example.sagicoupon.converters.CouponDtoToCouponConverter;
 import com.example.sagicoupon.repositories.CouponRepository;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import com.example.sagicoupon.validators.CouponValidators;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@AllArgsConstructor
 public class CouponServiceImpl implements CouponService {
 
     private CouponRepository couponRepository;
+    private CouponValidators couponValidators;
     private CouponToCouponDtoConverter couponToCouponDtoConverter;
     private CouponDtoToCouponConverter couponDtoToCouponConverter;
 
-    @Autowired
-    public CouponServiceImpl(CouponRepository couponRepository,
-                             @Lazy CouponToCouponDtoConverter couponToCouponDtoConverter,
-                             @Lazy CouponDtoToCouponConverter couponDtoToCouponConverter) {
-        this.couponRepository = couponRepository;
-        this.couponToCouponDtoConverter = couponToCouponDtoConverter;
-        this.couponDtoToCouponConverter = couponDtoToCouponConverter;
-    }
-
+    @Override
     public Coupon addCoupon(Coupon coupon) {
-        return Optional.ofNullable(couponToCouponDtoConverter.convert(coupon))
+        return Optional.ofNullable(coupon)
+                .filter(couponValidators::addCouponValidation)
+                .map(couponToCouponDtoConverter::convertSave)
                 .map(couponRepository::save)
                 .map(couponDtoToCouponConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot save coupon"));
     }
 
+    @Override
     public List<Coupon> getAllCoupons() {
         return couponRepository.findAll()
                 .stream()
@@ -45,27 +39,37 @@ public class CouponServiceImpl implements CouponService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Coupon findCouponById(Long id) {
         return couponRepository.findById(id)
                 .map(couponDtoToCouponConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot find coupon by id"));
     }
 
+    @Override
     public Coupon updateCoupon(Coupon coupon) {
-        Coupon existingCoupon = null;
-        try {
-            existingCoupon = findCouponById(coupon.getId());
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Could not update coupon because coupon not found ");
-        }
-        return Optional.ofNullable(couponToCouponDtoConverter.convert(existingCoupon))
+        return Optional.ofNullable(coupon)
+                .filter(couponValidators::updateCouponValidation)
+                .map(couponToCouponDtoConverter::convertUpdate)
                 .map(couponRepository::save)
                 .map(couponDtoToCouponConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot update coupon"));
     }
 
+    @Override
     public void deleteCouponById(Long id) {
-        Optional.ofNullable(couponToCouponDtoConverter.convert(findCouponById(id)))
+        Optional.ofNullable(findCouponById(id))
+                .map(couponToCouponDtoConverter::convertUpdate)
                 .ifPresent(couponRepository::delete);
+    }
+
+    @Override
+    public List<CouponDto> getExpiredCoupons() {
+        return couponRepository.getExpiredCoupons();
+    }
+
+    @Override
+    public CouponDto getCouponDtoById(Long id) {
+        return couponRepository.findById(id).get();
     }
 }

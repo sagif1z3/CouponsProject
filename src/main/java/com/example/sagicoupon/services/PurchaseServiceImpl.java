@@ -2,42 +2,47 @@ package com.example.sagicoupon.services;
 
 import com.example.sagicoupon.converters.PurchasesDtoToPurchasesConverter;
 import com.example.sagicoupon.converters.PurchasesToPurchasesDtoConverter;
+import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.model.Purchase;
 import com.example.sagicoupon.repositories.PurchasesRepository;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import com.example.sagicoupon.validators.PurchaseValidators;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
+@AllArgsConstructor
 public class PurchaseServiceImpl implements PurchaseService {
 
+    private CouponService couponService;
     private PurchasesRepository purchasesRepository;
+    private PurchaseValidators purchaseValidators;
     private PurchasesToPurchasesDtoConverter purchasesToPurchasesDtoConverter;
     private PurchasesDtoToPurchasesConverter purchasesDtoToPurchasesConverter;
 
-    @Autowired
-    public PurchaseServiceImpl(PurchasesRepository purchasesRepository,
-                               @Lazy PurchasesToPurchasesDtoConverter purchasesToPurchasesDtoConverter,
-                               @Lazy PurchasesDtoToPurchasesConverter purchasesDtoToPurchasesConverter) {
-        this.purchasesRepository = purchasesRepository;
-        this.purchasesToPurchasesDtoConverter = purchasesToPurchasesDtoConverter;
-        this.purchasesDtoToPurchasesConverter = purchasesDtoToPurchasesConverter;
-    }
-
+    @Override
+    @Transactional
     public Purchase addPurchase(Purchase purchase) {
-        return Optional.ofNullable(purchasesToPurchasesDtoConverter.convert(purchase))
+        Coupon coupon = couponService.findCouponById(purchase.getCouponId());
+        Optional.of(purchase)
+                .filter(purchaseValidators::addPurchaseValidation)
+                .map(purchasesToPurchasesDtoConverter::convertSave)
                 .map(purchasesRepository::save)
                 .map(purchasesDtoToPurchasesConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot save purchase"));
+
+        coupon.setAmount(coupon.getAmount() - purchase.getAmount());
+        couponService.updateCoupon(coupon);
+
+        return purchase;
     }
 
+    @Override
     public List<Purchase> getAllPurchases() {
         return purchasesRepository.findAll()
                 .stream()
@@ -45,27 +50,23 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public Purchase findPurchaseById(Long id) {
         return purchasesRepository.findById(id)
                 .map(purchasesDtoToPurchasesConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot find purchase by id"));
     }
 
-    public Purchase updatePurchase(Purchase purchase) {
-        Purchase existingPurchase = null;
-        try {
-            existingPurchase = findPurchaseById(purchase.getId());
-        } catch (RuntimeException e) {
-            throw new RuntimeException("Could not update purchase because purchase not found ");
-        }
-        return Optional.ofNullable(purchasesToPurchasesDtoConverter.convert(existingPurchase))
-                .map(purchasesRepository::save)
-                .map(purchasesDtoToPurchasesConverter::convert)
-                .orElseThrow(() -> new RuntimeException("Cannot update purchase"));
-    }
-
+    @Override
+    @Transactional
     public void deletePurchaseById(Long id) {
-        Optional.ofNullable(purchasesToPurchasesDtoConverter.convert(findPurchaseById(id)))
+        Optional.ofNullable(findPurchaseById(id))
+                .map(purchasesToPurchasesDtoConverter::convert)
                 .ifPresent(purchasesRepository::delete);
+
+        Purchase purchase = findPurchaseById(id);
+        Coupon coupon = couponService.findCouponById(purchase.getCouponId());
+        coupon.setAmount(coupon.getAmount() + purchase.getAmount());
+        couponService.updateCoupon(coupon);
     }
 }
