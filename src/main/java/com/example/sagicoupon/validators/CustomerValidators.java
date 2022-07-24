@@ -1,7 +1,5 @@
 package com.example.sagicoupon.validators;
 
-import com.example.sagicoupon.dto.CustomerDto;
-import com.example.sagicoupon.dto.UserDto;
 import com.example.sagicoupon.enums.ErrorType;
 import com.example.sagicoupon.enums.UserType;
 import com.example.sagicoupon.exceptions.ServerException;

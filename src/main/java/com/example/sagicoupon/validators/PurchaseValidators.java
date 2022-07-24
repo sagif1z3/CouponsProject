@@ -2,18 +2,14 @@ package com.example.sagicoupon.validators;
 
 import com.example.sagicoupon.enums.ErrorType;
 import com.example.sagicoupon.exceptions.ServerException;
-import com.example.sagicoupon.model.Company;
 import com.example.sagicoupon.model.Coupon;
 import com.example.sagicoupon.model.Purchase;
 import com.example.sagicoupon.model.User;
-import com.example.sagicoupon.repositories.PurchasesRepository;
 import com.example.sagicoupon.services.CouponService;
 import com.example.sagicoupon.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 @Component

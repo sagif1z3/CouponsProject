@@ -10,13 +10,13 @@ public interface CouponService {
 
     List<Coupon> getAllCoupons();
 
-    Coupon findCouponById(Long id);
+    Coupon findCouponById(long id);
 
     Coupon updateCoupon(Coupon coupon);
 
-    void deleteCouponById(Long id);
+    void deleteCouponById(long id);
 
     List<CouponDto> getExpiredCoupons();
 
-    CouponDto getCouponDtoById (Long id);
+    CouponDto getCouponDtoById (long id);
 }

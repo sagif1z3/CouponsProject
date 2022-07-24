@@ -29,11 +29,6 @@ public class PurchaseController {
         return purchaseService.getAllPurchases();
     }
 
-    @PutMapping("/update")
-    public Purchase updatePurchase (@RequestBody Purchase purchase){
-        return purchaseService.updatePurchase(purchase);
-    }
-
     @GetMapping("/{id}/delete")
     public void deletePurchaseById(@PathVariable Long id){
         purchaseService.deletePurchaseById(id);

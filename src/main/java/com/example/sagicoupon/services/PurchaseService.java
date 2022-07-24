@@ -9,8 +9,7 @@ public interface PurchaseService {
 
     List<Purchase> getAllPurchases();
 
-    Purchase findPurchaseById(Long id);
+    Purchase findPurchaseById(long id);
 
-    void deletePurchaseById(Long id);
-
+    void deletePurchaseById(long id);
 }

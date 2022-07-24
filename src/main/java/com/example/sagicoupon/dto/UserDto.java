@@ -40,4 +40,6 @@ public class UserDto {
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "userDto")
     private List<PurchaseDto> purchaseDto;
 
+    @Transient
+    private String token;
 }

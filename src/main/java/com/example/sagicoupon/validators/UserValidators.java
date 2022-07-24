@@ -6,6 +6,7 @@ import com.example.sagicoupon.exceptions.ServerException;
 import com.example.sagicoupon.model.User;
 import com.example.sagicoupon.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 public class UserValidators {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     public boolean addUserValidations(User user) {
 
@@ -40,6 +42,8 @@ public class UserValidators {
                 .map(User::getPassword)
                 .filter(Regex::passwordValidation)
                 .orElseThrow(() -> new ServerException(ErrorType.USER_PASSWORD_IS_INVALID));
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return true;
     }

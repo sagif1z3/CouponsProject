@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 public class PurchaseServiceImpl implements PurchaseService {
 
     private CouponService couponService;
-    private PurchasesRepository purchasesRepository;
     private PurchaseValidators purchaseValidators;
+    private PurchasesRepository purchasesRepository;
     private PurchasesToPurchasesDtoConverter purchasesToPurchasesDtoConverter;
     private PurchasesDtoToPurchasesConverter purchasesDtoToPurchasesConverter;
 
@@ -29,7 +29,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     public Purchase addPurchase(Purchase purchase) {
         Coupon coupon = couponService.findCouponById(purchase.getCouponId());
-        Optional.of(purchase)
+        purchase = Optional.of(purchase)
                 .filter(purchaseValidators::addPurchaseValidation)
                 .map(purchasesToPurchasesDtoConverter::convertSave)
                 .map(purchasesRepository::save)
@@ -51,7 +51,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public Purchase findPurchaseById(Long id) {
+    public Purchase findPurchaseById(long id) {
         return purchasesRepository.findById(id)
                 .map(purchasesDtoToPurchasesConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot find purchase by id"));
@@ -59,7 +59,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public void deletePurchaseById(Long id) {
+    public void deletePurchaseById(long id) {
         Optional.ofNullable(findPurchaseById(id))
                 .map(purchasesToPurchasesDtoConverter::convert)
                 .ifPresent(purchasesRepository::delete);

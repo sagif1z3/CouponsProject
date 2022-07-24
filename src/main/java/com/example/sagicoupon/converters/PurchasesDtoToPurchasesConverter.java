@@ -11,11 +11,13 @@ public class PurchasesDtoToPurchasesConverter implements Converter<PurchaseDto, 
 
     @Override
     public Purchase convert(@NotNull PurchaseDto source) {
-        Purchase purchaseDto = new Purchase();
-        purchaseDto.setId(source.getId());
-        purchaseDto.setDate(source.getDate());
-        purchaseDto.setAmount(source.getAmount());
-        purchaseDto.setTotalPrice(source.getTotalPrice());
-        return purchaseDto;
+        Purchase purchase = new Purchase();
+        purchase.setId(source.getId());
+        purchase.setUserId(source.getUserDto().getId());
+        purchase.setCouponId(source.getCouponDto().getId());
+        purchase.setDate(source.getDate());
+        purchase.setAmount(source.getAmount());
+        purchase.setTotalPrice(source.getTotalPrice());
+        return purchase;
     }
 }

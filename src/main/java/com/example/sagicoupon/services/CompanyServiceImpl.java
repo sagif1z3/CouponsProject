@@ -1,6 +1,8 @@
 package com.example.sagicoupon.services;
 
 import com.example.sagicoupon.dto.CompanyDto;
+import com.example.sagicoupon.enums.ErrorType;
+import com.example.sagicoupon.exceptions.ServerException;
 import com.example.sagicoupon.model.Company;
 import com.example.sagicoupon.converters.CompanyToCompanyDtoConverter;
 import com.example.sagicoupon.converters.CompanyDtoToCompanyConverter;
@@ -22,7 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
     private CompanyDtoToCompanyConverter companyDtoToCompanyConverter;
 
     @Override
-    public Company addCompany(Company company) {
+    public Company addCompany(Company company) throws ServerException {
         return Optional.ofNullable(company)
                 .filter(companyValidators::addCompanyValidations)
                 .map(companyToCompanyDtoConverter::convertSave)
@@ -32,7 +34,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> getAllCompanies() {
+    public List<Company> getAllCompanies() throws ServerException  {
         return companyRepository.findAll()
                 .stream()
                 .map(companyDtoToCompanyConverter::convert)
@@ -40,14 +42,14 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company findCompanyById(Long id) {
+    public Company findCompanyById(long id) throws ServerException  {
         return companyRepository.findById(id)
                 .map(companyDtoToCompanyConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot find company by id"));
     }
 
     @Override
-    public Company updateCompany(Company company) {
+    public Company updateCompany(Company company) throws ServerException  {
         return Optional.ofNullable(company)
                 .filter(companyValidators::updateCompanyValidation)
                 .map(companyToCompanyDtoConverter::convertUpdate)
@@ -57,14 +59,15 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void deleteCompanyById(Long id) {
+    public void deleteCompanyById(long id) throws ServerException  {
         Optional.ofNullable(findCompanyById(id))
                 .map(companyToCompanyDtoConverter::convert)
                 .ifPresent(companyRepository::delete);
     }
 
     @Override
-    public CompanyDto getCompanyDtoById(Long id) {
-        return companyRepository.findById(id).get();
+    public CompanyDto getCompanyDtoById(long id) throws ServerException {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new ServerException(ErrorType.COMPANY_NAME_IS_INVALID));
     }
 }

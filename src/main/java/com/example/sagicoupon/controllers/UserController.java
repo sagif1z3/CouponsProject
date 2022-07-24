@@ -1,8 +1,10 @@
 package com.example.sagicoupon.controllers;
 
 import com.example.sagicoupon.model.User;
+import com.example.sagicoupon.model.UserLogin;
 import com.example.sagicoupon.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -12,6 +14,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @PostMapping("/login")
+    public User login (@RequestBody UserLogin userLogin){
+        return userService.login(userLogin);
+    }
 
     @PostMapping("/addnew")
     public User addNewUser(@RequestBody User user) {

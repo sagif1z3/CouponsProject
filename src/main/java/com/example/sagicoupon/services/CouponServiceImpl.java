@@ -40,7 +40,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Coupon findCouponById(Long id) {
+    public Coupon findCouponById(long id) {
         return couponRepository.findById(id)
                 .map(couponDtoToCouponConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot find coupon by id"));
@@ -57,7 +57,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public void deleteCouponById(Long id) {
+    public void deleteCouponById(long id) {
         Optional.ofNullable(findCouponById(id))
                 .map(couponToCouponDtoConverter::convertUpdate)
                 .ifPresent(couponRepository::delete);
@@ -69,7 +69,8 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public CouponDto getCouponDtoById(Long id) {
-        return couponRepository.findById(id).get();
+    public CouponDto getCouponDtoById(long id) {
+        return couponRepository.findById(id)
+                .orElse(null);
     }
 }

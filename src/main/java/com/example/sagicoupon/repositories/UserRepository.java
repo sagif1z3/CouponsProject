@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<UserDto, Long> {
     Optional<UserDto> findFirstByUsername (String username);
 
     Optional<UserDto> findFirstByPassword (String password);
+
+    boolean existsByUsername(String username);
 }

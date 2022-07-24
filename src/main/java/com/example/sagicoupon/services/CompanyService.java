@@ -10,11 +10,11 @@ public interface CompanyService {
 
     List<Company> getAllCompanies ();
 
-    Company findCompanyById (Long id);
+    Company findCompanyById (long id);
 
     Company updateCompany (Company company);
 
-    void deleteCompanyById (Long id);
+    void deleteCompanyById (long id);
 
-    CompanyDto getCompanyDtoById (Long id);
+    CompanyDto getCompanyDtoById (long id);
 }

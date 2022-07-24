@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer findCustomerById(Long id) {
+    public Customer findCustomerById(long id) {
         return customerRepository.findById(id)
                 .map(customerDtoToCustomerConverter::convert)
                 .orElseThrow(() -> new RuntimeException("Cannot find customer by id"));
@@ -56,7 +56,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomerById(Long id) {
+    public void deleteCustomerById(long id) {
         Optional.ofNullable(findCustomerById(id))
                 .map(customerToCustomerDtoConverter::convert)
                 .ifPresent(customerRepository::delete);
